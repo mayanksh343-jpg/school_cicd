@@ -3,11 +3,11 @@ FROM node:20 AS build
 
 WORKDIR /app
 
-COPY my-react-app/package*.json ./
+COPY package*.json ./
 
 RUN npm install
 
-COPY my-react-app/ .
+COPY . .
 
 RUN npm run build
 

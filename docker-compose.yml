@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    container_name: school-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    image: mayanksh786/school-backend
+    container_name: school-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  frontend:
+    image: mayanksh786/school-frontend
+    container_name: school-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+

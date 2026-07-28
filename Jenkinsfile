@@ -41,7 +41,7 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
+        stage('Push Image1') {
             steps {
                 sh "docker push ${BACKEND_IMAGE}:${TAG}"
                 sh "docker push ${FRONTEND_IMAGE}:${TAG}"

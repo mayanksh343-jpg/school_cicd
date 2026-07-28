@@ -65,7 +65,7 @@ pipeline {
 
 
     }
-
+    }
     post {
         always {
             script {
@@ -83,5 +83,4 @@ pipeline {
             echo "Pipeline failed!"
         }
     }
-}
 }

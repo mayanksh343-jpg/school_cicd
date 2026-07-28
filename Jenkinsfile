@@ -47,6 +47,23 @@ pipeline {
                 sh "docker push ${FRONTEND_IMAGE}:${TAG}"
             }
         }
+
+       stage('Deploy') {
+    steps {
+        sh '''
+        docker rm -f backend frontend || true
+
+        docker run -d --name backend \
+          -p 5000:5000 \
+          mayanksh786/school-backend:latest
+
+        docker run -d --name frontend \
+          -p 80:80 \
+          mayanksh786/school-frontend:latest
+        '''
+    }
+
+
     }
 
     post {

@@ -4,28 +4,41 @@ pipeline {
     environment {
         FRONTEND_IMAGE = "mayanksh786/school-frontend"
         BACKEND_IMAGE  = "mayanksh786/school-backend"
-        TAG = "latest"
+        TAG = "$BUILD_NUMBER"
     }
 
     stages {
+
+        stage('Clean Workspace') {
+          steps {
+           cleanWs()
+          }
+        }
 
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+        
+        stage('Build Images') {
+    steps {
+        sh '''
+        docker build -t ${BACKEND_IMAGE}:${TAG} ./backend
+        docker build -t ${FRONTEND_IMAGE}:${TAG} ./frontend
+        '''
+    }
+}
+        
 
-        stage('Build Backend Image') {
-            steps {
-                sh "docker build -t ${BACKEND_IMAGE}:${TAG} ./backend"
-            }
-        }
-
-        stage('Build Frontend Image') {
-            steps {
-                sh "docker build -t ${FRONTEND_IMAGE}:${TAG} ./frontend"
-            }
-        }
+        stage('Security Scan') {
+          steps {
+            sh '''
+               trivy image ${BACKEND_IMAGE}:${TAG}
+                trivy image ${FRONTEND_IMAGE}:${TAG}
+               '''
+          }
+         }
 
         stage('Docker Hub Login') {
             steps {
@@ -48,23 +61,38 @@ pipeline {
             }
         }
 
-       stage('Deploy') {
+     stage('Deploy') {
+       steps {
+        sh '''
+        docker compose down
+
+        docker compose pull
+
+        docker compose up -d
+        '''  
+     }
+    }
+
+    stage('Cleanup') {
     steps {
         sh '''
-        docker rm -f backend frontend || true
-
-        docker run -d --name backend \
-          -p 5000:5000 \
-          mayanksh786/school-backend:latest
-
-        docker run -d --name frontend \
-          -p 80:80 \
-          mayanksh786/school-frontend:latest
+        docker image prune -f
         '''
     }
+}
 
 
+      stage('Health Check') {
+    steps {
+        sh '''
+        sleep 15
+
+        curl -f http://localhost:5000 || exit 1
+        curl -f http://localhost || exit 1
+        '''
     }
+}
+
     }
     post {
     always {

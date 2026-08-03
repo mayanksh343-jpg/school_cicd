@@ -11,7 +11,7 @@ services:
       - mongo-data:/data/db
 
   backend:
-    image: mayanksh786/school-backend
+    image: mayanksh786/school-backend:latest
     container_name: school-backend
     restart: always
     env_file:
@@ -22,7 +22,7 @@ services:
       - mongo
 
   frontend:
-    image: mayanksh786/school-frontend
+    image: mayanksh786/school-frontend:latest
     container_name: school-frontend
     restart: always
     ports:

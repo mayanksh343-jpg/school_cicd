@@ -54,12 +54,20 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
-            steps {
-                sh "docker push ${BACKEND_IMAGE}:${TAG}"
-                sh "docker push ${FRONTEND_IMAGE}:${TAG}"
-            }
-        }
+         stage('Push Image') {
+             steps {
+        sh '''
+        docker push ${BACKEND_IMAGE}:${TAG}
+        docker push ${FRONTEND_IMAGE}:${TAG}
+
+        docker tag ${BACKEND_IMAGE}:${TAG} ${BACKEND_IMAGE}:latest
+        docker tag ${FRONTEND_IMAGE}:${TAG} ${FRONTEND_IMAGE}:latest
+
+        docker push ${BACKEND_IMAGE}:latest
+        docker push ${FRONTEND_IMAGE}:latest
+        '''
+    }
+}
 
      stage('Deploy') {
        steps {
@@ -73,16 +81,7 @@ pipeline {
      }
     }
 
-    stage('Cleanup') {
-    steps {
-        sh '''
-        docker image prune -f
-        '''
-    }
-}
-
-
-      stage('Health Check') {
+    stage('Health Check') {
     steps {
         sh '''
         sleep 15
@@ -92,6 +91,19 @@ pipeline {
         '''
     }
 }
+
+
+
+    stage('Cleanup') {
+    steps {
+        sh '''
+        docker image prune -f
+        '''
+    }
+}
+
+
+      
 
     }
     post {

@@ -1,0 +1,6 @@
+---
+- import_playbook: java.yml
+
+- import_playbook: nginx.yml
+
+- import_playbook: jenkins.yml

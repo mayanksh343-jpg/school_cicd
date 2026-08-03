@@ -26,6 +26,13 @@ mongoose
 
 app.use('/', Routes);
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "UP",
+        message: "Backend is healthy"
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Server started at port no. ${PORT}`)
 })

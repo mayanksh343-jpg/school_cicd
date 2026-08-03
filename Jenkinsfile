@@ -86,8 +86,8 @@ pipeline {
         sh '''
         sleep 15
 
-        curl -f http://localhost:5000 || exit 1
-        curl -f http://localhost || exit 1
+        curl -f http://localhost:5000/health || exit 1
+        curl -f http://localhost:3000/  || exit 1
         '''
     }
 }

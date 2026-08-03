@@ -32,13 +32,13 @@ pipeline {
         
 
         stage('Security Scan') {
-          steps {
-            sh '''
-               trivy image ${BACKEND_IMAGE}:${TAG}
-                trivy image ${FRONTEND_IMAGE}:${TAG}
-               '''
-          }
-         }
+    steps {
+        sh '''
+            /usr/bin/trivy image ${BACKEND_IMAGE}:${TAG}
+            /usr/bin/trivy image ${FRONTEND_IMAGE}:${TAG}
+        '''
+    }
+}
 
         stage('Docker Hub Login') {
             steps {

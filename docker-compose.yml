@@ -25,6 +25,7 @@ services:
       - "3000:80"
     depends_on:
       - backend
+      #Start the backend container before starting the frontend container.
 
 
 volumes:

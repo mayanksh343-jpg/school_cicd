@@ -1,14 +1,15 @@
 ############################
 # Ubuntu AMI
-############################
+#this data block will give latest ami id 
 
 data "aws_ami" "ubuntu" {
-
+#if give many option it pick latest one 
   most_recent = true
-
+#check if came from real publisher or not
   owners = ["099720109477"]
 
   filter {
+    #name = "Which field should AWS search?"
     name = "name"
 
     values = [

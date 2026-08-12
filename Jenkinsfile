@@ -22,7 +22,7 @@ pipeline {
             }
         }
         
-       stage('Server Setup with Ansible') {
+       stage('Servers  Setup with Ansible') {
     steps {
         sh '''
            ANSIBLE_CONFIG=Ansible/ansible.cfg \

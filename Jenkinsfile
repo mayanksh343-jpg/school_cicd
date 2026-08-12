@@ -11,6 +11,7 @@ pipeline {
 
         stage('Clean Workspace') {
           steps {
+            //Ye Jenkins ka Workspace Cleanup Plugin ka step hai.
            cleanWs()
           }
         }
@@ -21,6 +22,18 @@ pipeline {
             }
         }
         
+       stage('Server Setup with Ansible') {
+    steps {
+        sh '''
+        ansible-playbook \
+        -i Ansible/inventory.ini \
+        Ansible/playbook.yml
+        '''
+    }
+}
+
+
+
         stage('Build Images') {
     steps {
         sh '''
@@ -69,17 +82,17 @@ pipeline {
     }
 }
 
-     stage('Deploy') {
-       steps {
+     stage('Deploy with Helm') {
+    steps {
+        // ''' jaab multi lines ho or \ next line ma code aka liya
         sh '''
-        docker compose down
-
-        docker compose pull
-
-        docker compose up -d
-        '''  
-     }
+            helm upgrade --install school-management \
+            ./helm/school-helm \
+            --namespace school-management \
+            --create-namespace
+        '''
     }
+}
 
     stage('Health Check') {
     steps {

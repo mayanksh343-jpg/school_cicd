@@ -94,7 +94,7 @@ pipeline {
     }
 }
 
-    stage('Health Check') {
+    stage('health Check') {
     steps {
         sh '''
         sleep 15

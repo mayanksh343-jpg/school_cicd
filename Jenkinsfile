@@ -25,7 +25,7 @@ pipeline {
        stage('Server Setup with Ansible') {
     steps {
         sh '''
-        ansible-playbooks \
+        ansible-playbook \
         -i Ansible/inventory.ini \
         Ansible/playbooks.yml
         '''
